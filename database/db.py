@@ -60,6 +60,69 @@ def create_user(name, email, password_hash):
         conn.close()
 
 
+def get_user_by_id(user_id):
+    conn = get_db()
+    try:
+        return conn.execute(
+            "SELECT * FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+    finally:
+        conn.close()
+
+
+def get_expense_summary(user_id):
+    conn = get_db()
+    try:
+        return conn.execute(
+            """
+            SELECT
+                COUNT(*)                   AS expense_count,
+                COALESCE(SUM(amount), 0.0) AS total_amount,
+                MAX(date)                  AS latest_date
+            FROM expenses
+            WHERE user_id = ?
+            """,
+            (user_id,)
+        ).fetchone()
+    finally:
+        conn.close()
+
+
+def get_top_categories(user_id):
+    conn = get_db()
+    try:
+        return conn.execute(
+            """
+            SELECT category, SUM(amount) AS total
+            FROM expenses
+            WHERE user_id = ?
+            GROUP BY category
+            ORDER BY total DESC
+            LIMIT 5
+            """,
+            (user_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+
+
+def get_recent_expenses(user_id):
+    conn = get_db()
+    try:
+        return conn.execute(
+            """
+            SELECT amount, category, date, description
+            FROM expenses
+            WHERE user_id = ?
+            ORDER BY date DESC, id DESC
+            LIMIT 5
+            """,
+            (user_id,)
+        ).fetchall()
+    finally:
+        conn.close()
+
+
 def seed_db():
     conn = get_db()
     if conn.execute("SELECT COUNT(*) FROM users").fetchone()[0] > 0:
