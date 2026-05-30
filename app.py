@@ -1,7 +1,12 @@
-from flask import Flask, render_template
-from database.db import get_db, init_db, seed_db
+import os
+import re
+import sqlite3
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
+from werkzeug.security import generate_password_hash
+from database.db import get_db, init_db, seed_db, create_user
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
 
 
 # ------------------------------------------------------------------ #
@@ -13,9 +18,37 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    name = request.form.get("name", "").strip()
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "")
+
+    if not name:
+        flash("Full name is required.", "error")
+        return render_template("register.html", name=name, email=email)
+
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        flash("Please enter a valid email address.", "error")
+        return render_template("register.html", name=name, email=email)
+
+    if len(password) < 8:
+        flash("Password must be at least 8 characters.", "error")
+        return render_template("register.html", name=name, email=email)
+
+    password_hash = generate_password_hash(password)
+
+    try:
+        create_user(name, email, password_hash)
+    except sqlite3.IntegrityError:
+        flash("An account with that email already exists.", "error")
+        return render_template("register.html", name=name, email=email)
+
+    flash("Account created! Please sign in.", "success")
+    return redirect(url_for("login"))
 
 
 @app.route("/login")
