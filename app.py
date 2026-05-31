@@ -1,6 +1,8 @@
 import os
 import re
 import sqlite3
+import calendar
+from datetime import date, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
@@ -94,6 +96,56 @@ def logout():
     return redirect(url_for("landing"))
 
 
+def _fmt_label(date_from, date_to):
+    fmt = "%d %b %Y"
+    return (
+        f"{date.fromisoformat(date_from).strftime(fmt)}"
+        f" – "
+        f"{date.fromisoformat(date_to).strftime(fmt)}"
+    )
+
+
+def _resolve_filter(req):
+    period   = req.args.get("period", "").strip()
+    raw_from = req.args.get("from", "").strip()
+    raw_to   = req.args.get("to", "").strip()
+    today = date.today()
+
+    if period == "this_month":
+        date_from = today.replace(day=1).isoformat()
+        date_to   = today.isoformat()
+        return date_from, date_to, "this_month", _fmt_label(date_from, date_to)
+
+    if period == "last_month":
+        last_of_prev  = today.replace(day=1) - timedelta(days=1)
+        first_of_prev = last_of_prev.replace(day=1)
+        date_from = first_of_prev.isoformat()
+        date_to   = last_of_prev.isoformat()
+        return date_from, date_to, "last_month", _fmt_label(date_from, date_to)
+
+    if period == "last_3_months":
+        month, year = today.month - 3, today.year
+        if month <= 0:
+            month += 12
+            year  -= 1
+        max_day = calendar.monthrange(year, month)[1]
+        date_from = date(year, month, min(today.day, max_day)).isoformat()
+        date_to   = today.isoformat()
+        return date_from, date_to, "last_3_months", _fmt_label(date_from, date_to)
+
+    if raw_from or raw_to:
+        try:
+            df = date.fromisoformat(raw_from)
+            dt = date.fromisoformat(raw_to)
+            if df > dt:
+                raise ValueError
+            return raw_from, raw_to, "custom", _fmt_label(raw_from, raw_to)
+        except ValueError:
+            pass
+
+    return None, None, "all_time", "All time"
+
+
 @app.route("/profile")
 def profile():
     if not session.get("user_id"):
@@ -105,9 +157,11 @@ def profile():
         session.clear()
         return redirect(url_for("login"))
 
-    stats = get_summary_stats(uid)
-    transactions = get_recent_transactions(uid, limit=10)
-    breakdown = get_category_breakdown(uid)
+    date_from, date_to, active_period, filter_label = _resolve_filter(request)
+
+    stats        = get_summary_stats(uid, date_from=date_from, date_to=date_to)
+    transactions = get_recent_transactions(uid, limit=10, date_from=date_from, date_to=date_to)
+    breakdown    = get_category_breakdown(uid, date_from=date_from, date_to=date_to)
 
     recent_expenses = [
         {**tx, "amount": f"₹{tx['amount']:,.2f}"}
@@ -127,6 +181,8 @@ def profile():
         latest_date=stats["latest_date"],
         top_categories=top_categories,
         recent_expenses=recent_expenses,
+        active_period=active_period,
+        filter_label=filter_label,
     )
 
 

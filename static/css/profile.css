@@ -12,7 +12,7 @@
 
 .profile-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 960px;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -75,6 +75,86 @@
     width: 13px;
     height: 13px;
     flex-shrink: 0;
+}
+
+/* Filter bar -------------------------------------------------------- */
+
+.filter-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+}
+
+.filter-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.filter-btn {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    background: var(--paper-card);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.filter-btn--active,
+.filter-btn--active:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper-card);
+}
+
+.filter-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+}
+
+.filter-date-input {
+    width: 145px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+}
+
+.filter-date-sep {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.filter-apply-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+}
+
+.filter-active-label {
+    flex-basis: 100%;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-top: 0.1rem;
+}
+
+.filter-active-label strong {
+    color: var(--ink);
+    font-weight: 600;
 }
 
 /* Summary stats ---------------------------------------------------- */
@@ -281,6 +361,15 @@
     color: var(--ink-faint);
 }
 
+/* Bottom panels row ------------------------------------------------ */
+
+.profile-panels-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
 /* Responsive ------------------------------------------------------- */
 
 @media (max-width: 520px) {
@@ -295,5 +384,21 @@
 
     .cat-row {
         grid-template-columns: 90px 1fr 80px;
+    }
+
+    .profile-panels-row {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-custom {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 0;
+        border-left: none;
+    }
+
+    .filter-date-input,
+    .filter-apply-btn {
+        width: 100%;
     }
 }
