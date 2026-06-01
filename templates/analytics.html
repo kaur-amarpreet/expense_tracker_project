@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-page">
+
+    <div class="analytics-cs">
+
+        <!-- Eyebrow badge -->
+        <div class="analytics-badge">
+            <span class="analytics-badge-dot"></span>
+            In Development
+        </div>
+
+        <!-- Headline -->
+        <h1 class="analytics-cs-title">
+            Something <em>remarkable</em><br>is on its way.
+        </h1>
+
+        <!-- Subtext -->
+        <p class="analytics-cs-subtitle">
+            We're crafting powerful analytics so you can understand your spending,
+            spot trends, and make smarter financial decisions — all in one place.
+        </p>
+
+        <!-- Countdown timer -->
+        <div class="analytics-countdown">
+            <div class="countdown-unit">
+                <div class="countdown-box"><span id="cs-days">00</span></div>
+                <span class="countdown-label">Days</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <div class="countdown-box"><span id="cs-hours">00</span></div>
+                <span class="countdown-label">Hours</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <div class="countdown-box"><span id="cs-mins">00</span></div>
+                <span class="countdown-label">Minutes</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <div class="countdown-box"><span id="cs-secs">00</span></div>
+                <span class="countdown-label">Seconds</span>
+            </div>
+        </div>
+
+        <!-- Email capture -->
+        <div id="notifyFormWrap" style="width:100%;max-width:440px;">
+            <form class="notify-form" id="notifyForm" novalidate>
+                <div class="notify-row">
+                    <input
+                        type="email"
+                        class="notify-input"
+                        id="notifyEmail"
+                        placeholder="your@email.com"
+                        autocomplete="email"
+                    >
+                    <button type="submit" class="notify-btn">Notify me</button>
+                </div>
+                <p class="notify-error" id="notifyError"></p>
+            </form>
+        </div>
+
+        <div class="notify-success" id="notifySuccess">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            You're on the list. We'll be in touch.
+        </div>
+
+        <!-- Back link -->
+        <a href="{{ url_for('profile') }}" class="btn-ghost analytics-back">← Back to Profile</a>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var LAUNCH = new Date("2026-09-01T00:00:00Z");
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+
+    function tick() {
+        var diff = LAUNCH - Date.now();
+        if (diff < 0) { diff = 0; }
+        document.getElementById("cs-days").textContent  = pad(Math.floor(diff / 86400000));
+        document.getElementById("cs-hours").textContent = pad(Math.floor((diff / 3600000) % 24));
+        document.getElementById("cs-mins").textContent  = pad(Math.floor((diff / 60000) % 60));
+        document.getElementById("cs-secs").textContent  = pad(Math.floor((diff / 1000) % 60));
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+    document.getElementById("notifyForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = document.getElementById("notifyEmail").value.trim();
+        var err   = document.getElementById("notifyError");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            err.textContent = "Please enter a valid email address.";
+            return;
+        }
+        err.textContent = "";
+        document.getElementById("notifyFormWrap").style.display = "none";
+        var success = document.getElementById("notifySuccess");
+        success.style.display = "flex";
+    });
+}());
+</script>
+{% endblock %}

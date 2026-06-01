@@ -1,0 +1,258 @@
+/* ------------------------------------------------------------------ */
+/* Analytics — Coming Soon page                                        */
+/* ------------------------------------------------------------------ */
+
+.analytics-page {
+    min-height: calc(100vh - 60px - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem 6rem;
+    /* Subtle warm radial glow matching Spendly's accent */
+    background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(26,71,42,0.06) 0%, transparent 70%),
+        var(--paper);
+}
+
+.analytics-cs {
+    max-width: 640px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Eyebrow badge                                                       */
+/* ------------------------------------------------------------------ */
+
+.analytics-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-light);
+    border: 1px solid rgba(26, 71, 42, 0.28);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 2.5rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.analytics-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    box-shadow: 0 0 6px rgba(26, 71, 42, 0.55);
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Headline                                                            */
+/* ------------------------------------------------------------------ */
+
+.analytics-cs-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+}
+
+.analytics-cs-title em {
+    font-style: italic;
+    color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Subtitle                                                            */
+/* ------------------------------------------------------------------ */
+
+.analytics-cs-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 3.5rem;
+    font-weight: 300;
+}
+
+/* ------------------------------------------------------------------ */
+/* Countdown                                                           */
+/* ------------------------------------------------------------------ */
+
+.analytics-countdown {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.countdown-box {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.6rem;
+    min-width: 86px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.countdown-box span {
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: block;
+}
+
+.countdown-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+.countdown-sep {
+    font-family: 'Courier New', monospace;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: rgba(26, 71, 42, 0.25);
+    margin-bottom: 1.5rem;
+    user-select: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Email capture                                                       */
+/* ------------------------------------------------------------------ */
+
+.notify-form {
+    width: 100%;
+}
+
+.notify-row {
+    display: flex;
+    align-items: stretch;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.notify-row:focus-within {
+    border-color: var(--accent);
+}
+
+.notify-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.8rem 1.1rem;
+    color: var(--ink);
+    font-size: 0.95rem;
+    font-family: var(--font-body);
+    min-width: 0;
+}
+
+.notify-input::placeholder {
+    color: var(--ink-faint);
+}
+
+.notify-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.6rem 1.25rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin: 4px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.notify-btn:hover {
+    background: var(--accent);
+}
+
+.notify-error {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    text-align: left;
+    min-height: 1.2em;
+}
+
+.notify-success {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent-light);
+    border: 1px solid rgba(26, 71, 42, 0.25);
+    border-radius: var(--radius-md);
+    padding: 0.875rem 1.5rem;
+    color: var(--accent);
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 440px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Back link                                                           */
+/* ------------------------------------------------------------------ */
+
+.analytics-back {
+    margin-top: 2.5rem;
+    font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .analytics-page {
+        padding: 3rem 1rem 4rem;
+        align-items: flex-start;
+    }
+
+    .countdown-box {
+        min-width: 68px;
+        padding: 1rem 1.1rem;
+    }
+
+    .notify-row {
+        flex-direction: column;
+        border-radius: var(--radius-md);
+    }
+
+    .notify-btn {
+        margin: 0 4px 4px;
+        width: calc(100% - 8px);
+        text-align: center;
+    }
+}
