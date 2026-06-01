@@ -1,0 +1,14 @@
+.add-expense-container {
+  max-width: 520px;
+}
+
+textarea.form-input {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.field-optional {
+  font-weight: 400;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}

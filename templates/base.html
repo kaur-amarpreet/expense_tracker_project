@@ -24,6 +24,7 @@
                    class="{% if request.endpoint == 'profile' %}nav-link--active{% endif %}">Profile</a>
                 <a href="{{ url_for('analytics') }}"
                    class="{% if request.endpoint == 'analytics' %}nav-link--active{% endif %}">Analytics</a>
+                <a href="{{ url_for('add_expense') }}" class="nav-cta">+ Add Expense</a>
                 <a href="{{ url_for('logout') }}">Log out</a>
                 {% else %}
                 <a href="{{ url_for('login') }}">Sign in</a>
